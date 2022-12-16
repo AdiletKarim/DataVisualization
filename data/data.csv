@@ -1,15 +1,15 @@
-NAME,total
-Almaty,214
-Aqmola,524
-Aqtöbe,555
-Atyrau,524
-East Kazakhstan,451
-Mangistau,5
-North Kazakhstan,451
-Pavlodar,189
-Qaraghandy,141
-Qostanay,5
-Qyzylorda,410
-South Kazakhstan,57
-West Kazakhstan,59
-Zhambyl,1051
+NAME,code,total
+Almaty,ALM,214
+Aqmola,AQM,524
+Aqtöbe,AQT,555
+Atyrau,ATY,524
+East Kazakhstan,EKZ,451
+Mangistau,MAN,5
+North Kazakhstan,NKZ,451
+Pavlodar,PAV,189
+Qaraghandy,QAR,141
+Qostanay,QOS,5
+Qyzylorda,QYZ,410
+South Kazakhstan,SKZ,57
+West Kazakhstan,WKZ,59
+Zhambyl,ZHM,1051
