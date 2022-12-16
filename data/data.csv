@@ -1,17 +1,17 @@
-NAME,code,pop
-Almaty,ALM,0
-Aqmola,AQM,0
-Aqtöbe,AQT,0
-Atyrau,ATY,0
-East Kazakhstan,EKZ,0
-Mangistau,MAN,0
-North Kazakhstan,NKZ,0
-Pavlodar,PAV,0
-Qaraghandy,QAR,141
-Qostanay,QOS,0
-Qyzylorda,QYZ,410
-South Kazakhstan,SKZ,0
-West Kazakhstan,WKZ,0
-Zhambyl,ZHM,0
-AlmatyCity,ALC,521
-AstanaCity,ASC,0
+NAME,code,pop10,pop11,pop12
+Almaty,ALM,84,127,30
+Aqmola,AQM,87,83,38
+Aqtöbe,AQT,94,118,29
+Atyrau,ATY,52,48,20
+East Kazakhstan,EKZ,219,178,150
+Mangistau,MAN,68,43,15
+North Kazakhstan,NKZ,42,48,15
+Pavlodar,PAV,129,103,47
+Qaraghandy,QAR,110,98,42
+Qostanay,QOS,80,73,32
+Qyzylorda,QYZ,66,67,34
+South Kazakhstan,SKZ,85,91,39
+West Kazakhstan,WKZ,50,56,10
+Zhambyl,ZHM,65,77,4
+AlmatyCity,ALC,185,166,66
+AstanaCity,ASC,102,101,30
