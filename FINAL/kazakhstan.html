@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+<div id = 'title'>
+    <center>
+        <p class="summary" style="font-size:20px;">Всплеск траффика абонентов по Казахстану</p>
+        <button *ngIf=!play (click)="playButton()" mat-mini-fab color="warn" id="play" style="padding: 10px 20px; font-size: 12px;" >
+            <mat-icon>Play</mat-icon>
+        </button>
+        <button *ngIf=refresh (click)="refreshButton()" mat-mini-fab color="warn" id="refresh" style="padding: 10px 20px; font-size: 12px;" >
+            <a href="kazakhstan.html" style="text-decoration:none"><mat-icon>Refresh</mat-icon></a></button>
+        <button *ngIf=refresh (click)="refreshButton()" mat-mini-fab color="warn" id="refresh" style="padding: 10px 20px; font-size: 12px;" >
+            <a href="analytics.html" style="text-decoration:none"><mat-icon>Analytics</mat-icon></a></button>
+    </center>
+</div>
+<svg id="my_dataviz" width="1300" height="500"><center> <p id="month_svg" style="font-size:20px;">  2022 Год  </p></center></svg>
+<script>
+    var svg = d3.select("#my_dataviz"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    var path = d3.geoPath();
+    var projection = d3.geoMercator()
+        .scale(1000)
+        .center([63,50])
+        .translate([width / 2, height / 2]);
+    // Data and color scale
+    var data = d3.map();
+    var colorScale = d3.scaleThreshold()
+        .domain([0,30,50,70,100,150,200])
+        .range(d3.schemeBlues[7]);
+    // Load external data and boot
+    d3.queue()
+        .defer(d3.json,"https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/map.json")
+        .defer(d3.csv, "https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/data.csv", function(d) { data.set(d.code, +d.pop12); })
+        .await(ready);
+
+    function ready(error, topo) {
+
+        let mouseOver = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .delay(5000)
+                .duration(200)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .delay(10000)
+                .duration(2000)
+                .style("opacity", 1)
+                .style("stroke", "black")
+        }
+
+        let mouseLeave = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .delay(10000)
+                .duration(200)
+                .style("opacity", .8)
+            d3.select(this)
+                .transition()
+                .delay(5000)
+                .duration(200)
+                .style("stroke", "transparent")
+        }
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            // draw each region
+            .attr("d", d3.geoPath()
+                .projection(projection)
+            )
+            // set the color of each region
+            .attr("fill", function (d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Kazakhstan" } )
+            .style("opacity", .8)
+            .on("mouseover", mouseOver )
+            .on("mouseleave", mouseLeave )
+        svg.append("rect")
+            .attr("width", 200)
+            .attr("height", 60)
+            .attr("x", 640)
+            .attr("y", 28)
+            .style("fill", "white")
+        svg.append("text")
+            .text("Декабрь")
+            .attr("x", 700)
+            .attr("y", 70)
+            .attr("font-size", "2.2em")
+            .attr("fill", "black")
+    }
+</script>
+<svg id="my_dataviz" width="1400" height="500"></svg>
+<script>
+    var svg = d3.select("#my_dataviz"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    var path = d3.geoPath();
+    var projection = d3.geoMercator()
+        .scale(1000)
+        .center([63,50])
+        .translate([width / 2, height / 2]);
+    // Data and color scale
+    var data = d3.map();
+    var colorScale = d3.scaleThreshold()
+        .domain([0,30,50,70,100,150,200])
+        .range(d3.schemeBlues[7]);
+    // Load external data and boot
+    d3.queue()
+        .defer(d3.json,"https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/map.json")
+        .defer(d3.csv, "https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/data.csv", function(d) { data.set(d.code, +d.pop11); })
+        .await(ready);
+
+    function ready(error, topo) {
+
+        let mouseOver = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .delay(5000)
+                .duration(200)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .delay(5000)
+                .duration(200)
+                .style("opacity", 1)
+                .style("stroke", "black")
+        }
+
+        let mouseLeave = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(1000)
+                .style("opacity", .8)
+            d3.select(this)
+                .transition()
+                .duration(1000)
+                .style("stroke", "transparent")
+        }
+        svg.append("rect")
+            .attr("width", 200)
+            .attr("height", 60)
+            .attr("x", 640)
+            .attr("y", 28)
+            .style("fill", "white")
+            .transition().duration(35000).remove();
+        svg.append("text")
+            .text("Ноябрь")
+            .attr("x", 700)
+            .attr("y", 70)
+            .attr("font-size", "2.2em")
+            .attr("fill", "black")
+            .transition().duration(35000).remove();
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            // draw each region
+            .attr("d", d3.geoPath()
+                .projection(projection)
+            )
+            // set the color of each region
+            .attr("fill", function (d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Kazakhstan" } )
+            .style("opacity", .8)
+            .on("mouseover", mouseOver )
+            .on("mouseleave", mouseLeave )
+            .transition().duration(35000).remove();
+
+
+    }
+</script>
+<svg id="my_dataviz" width="1400" height="500"></svg>
+<script>
+    var svg = d3.select("#my_dataviz"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    var path = d3.geoPath();
+    var projection = d3.geoMercator()
+        .scale(1000)
+        .center([63,50])
+        .translate([width / 2, height / 2]);
+    // Data and color scale
+    var data = d3.map();
+    var colorScale = d3.scaleThreshold()
+        .domain([0,30,50,70,100,150,200])
+        .range(d3.schemeBlues[7]);
+    // Load external data and boot
+    d3.queue()
+        .defer(d3.json,"https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/map.json")
+        .defer(d3.csv, "https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/data.csv", function(d) { data.set(d.code, +d.pop10); })
+        .await(ready);
+
+    function ready(error, topo) {
+
+        let mouseOver = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(2000)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .duration(2000)
+                .style("opacity", 1)
+                .style("stroke", "black")
+        }
+
+        let mouseLeave = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(10)
+                .style("opacity", .8)
+            d3.select(this)
+                .transition()
+                .duration(1000)
+                .style("stroke", "transparent")
+        }
+        svg.append("rect")
+            .attr("width", 200)
+            .attr("height", 60)
+            .attr("x", 640)
+            .attr("y", 28)
+            .style("fill", "white")
+            .transition().duration(28000).remove();
+        svg.append("text")
+            .text("Октябрь")
+            .attr("x", 700)
+            .attr("y", 70)
+            .attr("font-size", "2.2em")
+            .attr("fill", "black")
+            .transition().duration(28000).remove();
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            // draw each region
+            .attr("d", d3.geoPath()
+                .projection(projection)
+            )
+            // set the color of each region
+            .attr("fill", function (d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Kazakhstan" } )
+            .style("opacity", .8)
+            .on("mouseover", mouseOver )
+            .on("mouseleave", mouseLeave )
+            .transition().duration(28000).remove();
+
+
+    }
+</script>
+<svg id="my_dataviz" width="1400" height="500"></svg>
+<script>
+    var svg = d3.select("#my_dataviz"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    var path = d3.geoPath();
+    var projection = d3.geoMercator()
+        .scale(1000)
+        .center([45,50])
+        .translate([width / 2, height / 2]);
+    // Data and color scale
+    var data = d3.map();
+    var colorScale = d3.scaleThreshold()
+        .domain([0,30,50,70,100,150,200])
+        .range(d3.schemeBlues[7]);
+    // Load external data and boot
+    d3.queue()
+        .defer(d3.json,"https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/map.json")
+        .defer(d3.csv, "https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/data.csv", function(d) { data.set(d.code, +d.pop9); })
+        .await(ready);
+
+    function ready(error, topo) {
+
+        let mouseOver = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(2000)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .duration(2000)
+                .style("opacity", 1)
+                .style("stroke", "black")
+        }
+
+        let mouseLeave = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(1000)
+                .style("opacity", .8)
+            d3.select(this)
+                .transition()
+                .duration(1000)
+                .style("stroke", "transparent")
+        }
+        svg.append("rect")
+            .attr("width", 200)
+            .attr("height", 60)
+            .attr("x", 640)
+            .attr("y", 28)
+            .style("fill", "white")
+            .transition().duration(21000).remove();
+        svg.append("text")
+            .text("Сентябрь")
+            .attr("x", 700)
+            .attr("y", 70)
+            .attr("font-size", "2.2em")
+            .attr("fill", "black")
+            .transition().duration(21000).remove();
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            // draw each region
+            .attr("d", d3.geoPath()
+                .projection(projection)
+            )
+            // set the color of each region
+            .attr("fill", function (d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Kazakhstan" } )
+            .style("opacity", .8)
+            .on("mouseover", mouseOver )
+            .on("mouseleave", mouseLeave )
+            .transition().duration(21000).remove();
+
+
+    }
+</script>
+<svg id="my_dataviz" width="1400" height="500"></svg>
+<script>
+    var svg = d3.select("#my_dataviz"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    var path = d3.geoPath();
+    var projection = d3.geoMercator()
+        .scale(1000)
+        .center([63,50])
+        .translate([width / 2, height / 2]);
+    // Data and color scale
+    var data = d3.map();
+    var colorScale = d3.scaleThreshold()
+        .domain([0,30,50,70,100,150,200])
+        .range(d3.schemeBlues[7]);
+    // Load external data and boot
+    d3.queue()
+        .defer(d3.json,"https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/map.json")
+        .defer(d3.csv, "https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/data.csv", function(d) { data.set(d.code, +d.pop8); })
+        .await(ready);
+
+    function ready(error, topo) {
+
+        let mouseOver = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(2000)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .duration(2000)
+                .style("opacity", 1)
+                .style("stroke", "black")
+        }
+
+        let mouseLeave = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(1000)
+                .style("opacity", .8)
+            d3.select(this)
+                .transition()
+                .duration(1000)
+                .style("stroke", "transparent")
+        }
+        svg.append("rect")
+            .attr("width", 200)
+            .attr("height", 60)
+            .attr("x", 640)
+            .attr("y", 28)
+            .style("fill", "white")
+            .transition().duration(14000).remove();
+        svg.append("text")
+            .text("Август")
+            .attr("x", 700)
+            .attr("y", 70)
+            .attr("font-size", "2.2em")
+            .attr("fill", "black")
+            .transition().duration(14000).remove();
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            // draw each region
+            .attr("d", d3.geoPath()
+                .projection(projection)
+            )
+            // set the color of each region
+            .attr("fill", function (d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Kazakhstan" } )
+            .style("opacity", .8)
+            .on("mouseover", mouseOver )
+            .on("mouseleave", mouseLeave )
+            .transition().duration(14000).remove();
+
+
+    }
+</script>
+<svg id="my_dataviz" width="1400" height="800"></svg>
+<script>
+    var svg = d3.select("#my_dataviz"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    var path = d3.geoPath();
+    var projection = d3.geoMercator()
+        .scale(1000)
+        .center([63,50])
+        .translate([width / 2, height / 2]);
+    // Data and color scale
+    var data = d3.map();
+    var colorScale = d3.scaleThreshold()
+        .domain([0,30,50,70,100,150,200])
+        .range(d3.schemeBlues[7]);
+    // Load external data and boot
+    d3.queue()
+        .defer(d3.json,"https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/map.json")
+        .defer(d3.csv, "https://raw.githubusercontent.com/AdiletKarim/DataVisualization/main/data/data.csv", function(d) { data.set(d.code, +d.pop7); })
+        .await(ready);
+
+    function ready(error, topo) {
+
+        let mouseOver = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(2000)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .duration(2000)
+                .style("opacity", 1)
+                .style("stroke", "black")
+        }
+
+        let mouseLeave = function(d) {
+            d3.selectAll(".Kazakhstan")
+                .transition()
+                .duration(1000)
+                .style("opacity", .8)
+            d3.select(this)
+                .transition()
+                .duration(1000)
+                .style("stroke", "transparent")
+        }
+        svg.append("rect")
+            .attr("width", 200)
+            .attr("height", 60)
+            .attr("x", 640)
+            .attr("y", 28)
+            .style("fill", "white")
+            .transition().duration(7000).remove();
+        svg.append("text")
+            .text("Июль")
+            .attr("x", 700)
+            .attr("y", 70)
+            .attr("font-size", "2.2em")
+            .attr("fill", "black")
+            .transition().duration(7000).remove();
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(topo.features)
+            .enter()
+            .append("path")
+            // draw each region
+            .attr("d", d3.geoPath()
+                .projection(projection)
+            )
+            // set the color of each region
+            .attr("fill", function (d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            })
+            .style("stroke", "transparent")
+            .attr("class", function(d){ return "Kazakhstan" } )
+            .style("opacity", .8)
+            .on("mouseover", mouseOver )
+            .on("mouseleave", mouseLeave )
+            .transition().duration(7000).remove();
+
+    }
+
+</script>
